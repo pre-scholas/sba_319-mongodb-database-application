@@ -1,13 +1,14 @@
 // imports
 import express from 'express'
-import mongoose from 'mongoose'
+import Bike from '../models/bike_models.js';
 
+const router = express.Router();
 
 // GET all bikes
 router.get('/', async (req, res) => {
     try {
-        const bikes = await bike.find();
-        res.send(bikes);
+        const bikes = await Bike.find();
+        res.status(200).json(bikes);
     } catch (err) {
         console.log(err.message)
         res.send({ error: err.message})
@@ -18,9 +19,9 @@ router.get('/:id', async (req, res) => {
     try {
         const bike = await Bike.findById(req.params.id)
         if (bike == null) {
-            return res.status(404).send({ message: 'Cannot find bike' });
+            return res.status(404).json({ message: 'Cannot find bike' });
         }
-        res.send(bike)
+        res.status(200).json(bike)
     } catch (err) {
         console.log(err.message)
         res.send({ error: err.message })
@@ -38,7 +39,7 @@ router.post('/', async (req, res) => {
     });
     try {
         const newBike = await bike.save();
-        res.status(201).send(newBike);
+        res.status(201).json(newBike);
     } catch (err) {
         console.log(err.message)
         res.send({ error: err.message })
@@ -48,30 +49,29 @@ router.post('/', async (req, res) => {
 // PATCH update a bike
 router.patch('/:id', async (req, res) => {
     try {
-        const bike = await bike.findById(req.params.id);
+        const bike = await Bike.findById(req.params.id);
         if (bike == null) {
-            return res.status(404).send({ message: 'Cannot find bike' });
+            return res.status(404).json({ message: 'Cannot find bike' });
         }
         // Update fields if they exist in the request body
         Object.assign(bike, req.body);
         const updatedBike = await bike.save();
-        res.send(updatedBike);
+        res.status(200).json(updatedBike);
     } catch (err) {
-        res.status(400).send({ message: err.message})
+        res.status(400).json({ message: err.message })
     }
 })
 // DELETE a bike
 router.delete('/:id', async (req, res) => {
     try {
-        const bike = await Bike.findById(req.params.id);
-        if (bike == null) {
-            return res.status(404).send({ message: 'Cannot find bike' })
+        const deletedBike = await Bike.findByIdAndDelete(req.params.id);
+        if (deletedBike == null) {
+            return res.status(404).json({ message: 'Cannot find bike' })
         }
-        await Bike.findByIdAndDelete(req.params.id);
-        res.send({ message: 'Deleted bike' })
+        res.status(200).json({ message: 'Deleted bike' })
     } catch (err) {
-        res.status(500).send({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 })
 // export router
-module.exports = router
+export default router;
