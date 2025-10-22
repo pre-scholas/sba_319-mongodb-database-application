@@ -7,7 +7,7 @@ const router = express.Router();
 // GET all bikes
 router.get('/', async (req, res) => {
     try {
-        const bikes = await Bike.find({ isSold: false });
+        const bikes = await Bike.find({});
         res.status(200).json(bikes);
     } catch (err) {
         console.log(err.message)

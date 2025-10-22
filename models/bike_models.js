@@ -18,7 +18,7 @@ const bikeSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Year is required'],
         min: [1900, 'Year must be after 1900'],
-        max: [new Date().getFullYear(), 'Year must be in the past']
+        max: [new Date().getFullYear() + 1, 'Year cannot be more than one year in the future']
     },
     price: {
         type: Number,
@@ -47,6 +47,8 @@ const bikeSchema = new mongoose.Schema({
     }
 });
 
-const Bike = mongoose.model('Bike', bikeSchema.index({ make: 1, model: 1, year: 1 }, { unique: true }))
+bikeSchema.index({ make: 1, model: 1, year: 1 }, { unique: true });
 
-export default mongoose.model('Bike', bikeSchema);
+const Bike = mongoose.model('Bike', bikeSchema);
+
+export default Bike;
