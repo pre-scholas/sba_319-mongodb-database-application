@@ -7,7 +7,7 @@ const router = express.Router();
 // GET all bikes
 router.get('/', async (req, res) => {
     try {
-        const bikes = await Bike.find();
+        const bikes = await Bike.find({ isSold: false });
         res.status(200).json(bikes);
     } catch (err) {
         console.log(err.message)
@@ -29,6 +29,7 @@ router.get('/:id', async (req, res) => {
 })
 // POST a new bike
 router.post('/', async (req, res) => {
+    console.log(req.body)
     const bike = new Bike({
         make: req.body.make,
         model: req.body.model,

@@ -6,7 +6,7 @@ import bikeRoutes from './routes/bike_routes.js';
 
 const app = express()
 const PORT = process.env.PORT || 5050
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/usedBikeSales';
+const MONGODB_URI = process.env.ATLAS_URI;
 
 // Database connection
 mongoose.connect(MONGODB_URI)
